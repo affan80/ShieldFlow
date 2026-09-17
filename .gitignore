@@ -1,0 +1,3 @@
+.venv/
+logs/
+collect_logs.sh
