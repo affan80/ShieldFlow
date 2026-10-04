@@ -545,31 +545,22 @@ def main():
             errors="replace",
         ) as log:
 
-            # Ignore old log entries.
+            # Move to the end of the file initially
             log.seek(0, os.SEEK_END)
 
-            last_display = 0
-            last_sample = 0
+            last_display = time.time()
+            last_sample = time.time()
 
             while True:
-
-                # ============================================
-                # READ LOG
-                # ============================================
-
                 line = log.readline()
 
                 if line:
-
                     request = parse_log_line(line)
-
                     if request:
-
                         add_request(request)
-
                 else:
-
-                    time.sleep(0.05)
+                    # If no new line, wait a bit
+                    time.sleep(0.1)
 
                 now = time.time()
 
@@ -600,6 +591,7 @@ def main():
                         log_file,
                         now - start_time,
                     )
+                    sys.stdout.flush()
 
                     last_display = now
 
