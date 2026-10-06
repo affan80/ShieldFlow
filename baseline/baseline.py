@@ -1,12 +1,16 @@
 from collections import deque
-import math
+import time
 
 class BaselineManager:
     def __init__(self, max_samples=30):
         self.samples = deque(maxlen=max_samples)
+        self.last_sample = None
 
     def add_sample(self, rps):
-        self.samples.append(rps)
+        now = time.monotonic()
+        if self.last_sample is None or now - self.last_sample >= 1:
+            self.samples.append(rps)
+            self.last_sample = now
 
     def get_baseline(self):
         if not self.samples:
